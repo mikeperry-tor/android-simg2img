@@ -1,4 +1,5 @@
 CC      ?= gcc
+CXX     ?= g++
 LD      ?= gcc
 DEP_CC  ?= gcc
 AR      ?= ar
@@ -48,6 +49,8 @@ APPEND2SIMG_OBJS = $(APPEND2SIMG_SRCS:%.c=%.o)
 EXT2SIMG_SRCS = ext2simg.c ext4_utils.c
 EXT2SIMG_OBJS = $(EXT2SIMG_SRCS:%.c=%.o)
 
+VERITYTREE_SRCS = build_verity_tree.cpp
+
 SRCS = \
     $(SIMG2IMG_SRCS) \
     $(SIMG2SIMG_SRCS) \
@@ -59,7 +62,7 @@ SRCS = \
 .PHONY: default all clean
 
 default: all
-all: $(LIB_NAME) simg2img simg2simg img2simg append2simg ext2simg
+all: $(LIB_NAME) simg2img simg2simg img2simg append2simg ext2simg build_verity_tree
 
 $(LIB_NAME): $(LIB_OBJS)
 		$(AR) rc $(SLIB) $(LIB_OBJS)
@@ -79,6 +82,9 @@ append2simg: $(APPEND2SIMG_SRCS)
 
 ext2simg: $(EXT2SIMG_SRCS)
 		$(CC) $(CFLAGS) $(LIB_INCS) -o ext2simg $< $(LDFLAGS)
+
+build_verity_tree: $(VERITYTREE_SRCS)
+		$(CXX) $(CFLAGS) $(LIB_INCS) -o build_verity_tree $< $(LDFLAGS) -lcrypto
 
 %.o: %.c .depend
 		$(CC) -c $(CFLAGS) $(LIB_INCS) $< -o $@
