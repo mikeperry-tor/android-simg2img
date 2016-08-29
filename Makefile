@@ -15,7 +15,14 @@ LIB_SRCS = \
     sparse.c \
     sparse_crc32.c \
     sparse_err.c \
-    sparse_read.c
+    sparse_read.c \
+    ext4_utils.c \
+    ext4_sb.c \
+    allocate.c \
+    indirect.c \
+    extent.c \
+    crc16.c \
+    sha1.c
 LIB_OBJS = $(LIB_SRCS:%.c=%.o)
 LIB_INCS = -Iinclude
 
@@ -37,17 +44,22 @@ IMG2SIMG_OBJS = $(IMG2SIMG_SRCS:%.c=%.o)
 APPEND2SIMG_SRCS = $(LIBSPARSE_SRCS) append2simg.c
 APPEND2SIMG_OBJS = $(APPEND2SIMG_SRCS:%.c=%.o)
 
+# ext2simg
+EXT2SIMG_SRCS = ext2simg.c ext4_utils.c
+EXT2SIMG_OBJS = $(EXT2SIMG_SRCS:%.c=%.o)
+
 SRCS = \
     $(SIMG2IMG_SRCS) \
     $(SIMG2SIMG_SRCS) \
     $(IMG2SIMG_SRCS) \
     $(APPEND2SIMG_SRCS) \
+    $(EXT2SIMG_SRCS) \
     $(LIB_SRCS)
 
 .PHONY: default all clean
 
 default: all
-all: $(LIB_NAME) simg2img simg2simg img2simg append2simg
+all: $(LIB_NAME) simg2img simg2simg img2simg append2simg ext2simg
 
 $(LIB_NAME): $(LIB_OBJS)
 		$(AR) rc $(SLIB) $(LIB_OBJS)
@@ -65,11 +77,14 @@ img2simg: $(IMG2SIMG_SRCS)$
 append2simg: $(APPEND2SIMG_SRCS)
 		$(CC) $(CFLAGS) $(LIB_INCS) -o append2simg $< $(LDFLAGS)
 
+ext2simg: $(EXT2SIMG_SRCS)
+		$(CC) $(CFLAGS) $(LIB_INCS) -o ext2simg $< $(LDFLAGS)
+
 %.o: %.c .depend
 		$(CC) -c $(CFLAGS) $(LIB_INCS) $< -o $@
 
 clean:
-		$(RM) -f *.o *.a simg2img simg2simg img2simg append2simg .depend
+		$(RM) -f *.o *.a simg2img simg2simg img2simg append2simg ext2simg .depend
 
 ifneq ($(wildcard .depend),)
 include .depend
