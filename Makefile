@@ -37,6 +37,8 @@ SIMG2IMG_OBJS = $(SIMG2IMG_SRCS:%.c=%.o)
 SIMG2SIMG_SRCS = simg2simg.c
 SIMG2SIMG_OBJS = $(SIMG2SIMG_SRCS:%.c=%.o)
 
+SIMGTRUNC_SRCS = simg_trunc.c
+
 # img2simg
 IMG2SIMG_SRCS = $(LIBSPARSE_SRCS) img2simg.c
 IMG2SIMG_OBJS = $(IMG2SIMG_SRCS:%.c=%.o)
@@ -56,6 +58,7 @@ VERITYKEY_SRCS = generate_verity_key.c
 SRCS = \
     $(SIMG2IMG_SRCS) \
     $(SIMG2SIMG_SRCS) \
+    $(SIMGTRUNC_SRCS) \
     $(IMG2SIMG_SRCS) \
     $(APPEND2SIMG_SRCS) \
     $(EXT2SIMG_SRCS) \
@@ -64,7 +67,7 @@ SRCS = \
 .PHONY: default all clean
 
 default: all
-all: $(LIB_NAME) simg2img simg2simg img2simg append2simg ext2simg build_verity_tree generate_verity_key
+all: $(LIB_NAME) simg2img simg2simg img2simg append2simg ext2simg build_verity_tree generate_verity_key simg_trunc
 
 $(LIB_NAME): $(LIB_OBJS)
 		$(AR) rc $(SLIB) $(LIB_OBJS)
@@ -75,6 +78,9 @@ simg2img: $(SIMG2IMG_SRCS)
 
 simg2simg: $(SIMG2SIMG_SRCS)
 		$(CC) $(CFLAGS) $(LIB_INCS) -o simg2simg $< $(LDFLAGS)
+
+simg_trunc: $(SIMGTRUNC_SRCS)
+		$(CC) $(CFLAGS) $(LIB_INCS) -o simg_trunc $< $(LDFLAGS)
 
 img2simg: $(IMG2SIMG_SRCS)$
 		$(CC) $(CFLAGS) $(LIB_INCS) -o img2simg $< $(LDFLAGS)

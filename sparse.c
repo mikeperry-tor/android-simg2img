@@ -101,7 +101,7 @@ unsigned int sparse_count_chunks(struct sparse_file *s)
   return chunks;
 }
 
-static int sparse_file_write_block(struct output_file *out,
+int sparse_file_write_block(struct output_file *out,
     struct backed_block *bb)
 {
   int ret = -EINVAL;
