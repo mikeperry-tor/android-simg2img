@@ -101,7 +101,7 @@ generate_verity_key: $(VERITYKEY_SRCS)
 		$(CC) -c $(CFLAGS) $(LIB_INCS) $< -o $@
 
 clean:
-		$(RM) -f *.o *.a simg2img simg2simg img2simg append2simg ext2simg .depend
+		$(RM) -f *.o *.a simg2img simg2simg img2simg append2simg ext2simg simg_trunc build_verity_tree generate_verity_key.depend
 
 ifneq ($(wildcard .depend),)
 include .depend
